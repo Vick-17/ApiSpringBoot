@@ -8,19 +8,18 @@ public class VideoGame {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String titre;
-    @Column(name="date_publication")
-    private Date publiDate;
-    private String contenu;
+    private String title;
+    private Date date;
+    private String content;
     private String resume;
     @Column(name="image_url")
     private String imageUrl;
 
-    public VideoGame(int id, String titre, Date publiDate, String contenu, String resume, String imageUrl) {
+    public VideoGame(int id, String title, Date date, String content, String resume, String imageUrl) {
         this.id = id;
-        this.titre = titre;
-        this.publiDate = publiDate;
-        this.contenu = contenu;
+        this.title = title;
+        this.date = date;
+        this.content = content;
         this.resume = resume;
         this.imageUrl = imageUrl;
     }
@@ -36,28 +35,28 @@ public class VideoGame {
         this.id = id;
     }
 
-    public String getTitre() {
-        return titre;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitre(String titre) {
-        this.titre = titre;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Date getPubliDate() {
-        return publiDate;
+    public Date getDate() {
+        return date;
     }
 
-    public void setPubliDate(Date publiDate) {
-        this.publiDate = publiDate;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public String getContenu() {
-        return contenu;
+    public String getContent() {
+        return content;
     }
 
-    public void setContenu(String contenu) {
-        this.contenu = contenu;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getResume() {
