@@ -1,6 +1,5 @@
 package com.wipify.test.Controller;
 
-import com.wipify.test.model.BlocArticle;
 import com.wipify.test.model.VideoGame;
 import com.wipify.test.repository.VideoGameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
