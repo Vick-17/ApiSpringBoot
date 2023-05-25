@@ -12,12 +12,13 @@ public class User {
 
     private String nom;
     private String prenom;
+    private String pseudo;
     private String email;
     private String password;
     private String telephone;
     private String role;
 
-    public User(int id, String nom, String prenom, String email, String password, String telephone, String role) {
+    public User(int id, String nom, String prenom, String email, String password, String telephone, String role, String pseudo) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -25,6 +26,7 @@ public class User {
         this.password = password;
         this.telephone = telephone;
         this.role = role;
+        this.pseudo = pseudo;
     }
 
     public User() {
@@ -84,5 +86,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
     }
 }
