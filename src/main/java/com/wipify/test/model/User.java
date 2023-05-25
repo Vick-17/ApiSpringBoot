@@ -2,31 +2,40 @@ package com.wipify.test.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.GenerationType.AUTO;
+
 @Entity
 @Table(name="users")
-public class User {
+public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = AUTO)
     private int id;
 
+    @Column(unique = true)
     private String nom;
     private String prenom;
     private String pseudo;
     private String email;
     private String password;
     private String telephone;
-    private String role;
+    @ManyToMany(fetch = EAGER)
+    private Collection<RoleEntity> roles = new ArrayList<>();
 
-    public User(int id, String nom, String prenom, String email, String password, String telephone, String role, String pseudo) {
+    public User(int id, String nom, String prenom, String pseudo, String email, String password, String telephone, Collection<RoleEntity> roles) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
+        this.pseudo = pseudo;
         this.email = email;
         this.password = password;
         this.telephone = telephone;
-        this.role = role;
-        this.pseudo = pseudo;
+        this.roles = roles;
     }
 
     public User() {
@@ -80,19 +89,19 @@ public class User {
         this.telephone = telephone;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getPseudo() {
         return pseudo;
     }
 
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
+    }
+
+    public Collection<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<RoleEntity> roles) {
+        this.roles = roles;
     }
 }

@@ -29,5 +29,4 @@ private UserRepository userRepository;
             throw new IllegalArgumentException("Email ou mot de passe incorrect");
         }
     }
-
 }
