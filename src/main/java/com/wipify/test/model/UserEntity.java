@@ -1,20 +1,21 @@
 package com.wipify.test.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static jakarta.persistence.FetchType.EAGER;
-import static jakarta.persistence.GenerationType.AUTO;
+
 
 @Entity
-@Table(name="users")
-public class User implements Serializable {
+@Table(name = "users")
+public class UserEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(unique = true)
@@ -25,9 +26,9 @@ public class User implements Serializable {
     private String password;
     private String telephone;
     @ManyToMany(fetch = EAGER)
-    private Collection<RoleEntity> roles = new ArrayList<>();
+    private Collection<RoleEntity> role = new ArrayList<>();
 
-    public User(int id, String nom, String prenom, String pseudo, String email, String password, String telephone, Collection<RoleEntity> roles) {
+    public UserEntity(int id, String nom, String prenom, String pseudo, String email, String password, String telephone, Collection<RoleEntity> role) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -35,10 +36,15 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.telephone = telephone;
-        this.roles = roles;
+        this.role = role;
     }
 
-    public User() {
+    public UserEntity() {
+    }
+
+    public UserEntity(String pseudo, String password, Collection<SimpleGrantedAuthority> authorities) {
+        this.pseudo = pseudo;
+        this.password = password;
     }
 
     public int getId() {
@@ -97,11 +103,12 @@ public class User implements Serializable {
         this.pseudo = pseudo;
     }
 
-    public Collection<RoleEntity> getRoles() {
-        return roles;
+    public Collection<RoleEntity> getRole() {
+        return role;
     }
 
-    public void setRoles(Collection<RoleEntity> roles) {
-        this.roles = roles;
+    public void setRole(Collection<RoleEntity> role) {
+        this.role = role;
     }
+
 }

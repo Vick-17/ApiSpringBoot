@@ -1,6 +1,6 @@
 package com.wipify.test.Controller;
 
-import com.wipify.test.model.User;
+import com.wipify.test.model.UserEntity;
 import com.wipify.test.repository.UserLoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +15,18 @@ public class AuthController {
     private UserLoginRepository userLoginRepository;
 
     @PostMapping("/connexion")
-    public ResponseEntity<?> connexion(@RequestBody User user){
-        User userIsExisting = userLoginRepository.findByEmail(user.getEmail());
+    public ResponseEntity<?> connexion(@RequestBody UserEntity userEntity){
+        UserEntity userEntityIsExisting = userLoginRepository.findByEmail(userEntity.getEmail());
 
-        if (userIsExisting == null) {
+        if (userEntityIsExisting == null) {
             return ResponseEntity.badRequest().body("Utilisateur introuvable");
         }
 
-        if (!userIsExisting.getPassword().equals(user.getPassword())){
+        if (!userEntityIsExisting.getPassword().equals(userEntity.getPassword())){
             return ResponseEntity.badRequest().body("Mot de passe incorrect");
         }
 
-        String token =  (userIsExisting.getEmail());
+        String token =  (userEntityIsExisting.getEmail());
         // Générer un jeton d'authentification et le renvoyer
         return ResponseEntity.ok(token);
     }

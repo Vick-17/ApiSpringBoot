@@ -3,17 +3,25 @@ package com.wipify.test.Controller;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
 import com.wipify.test.model.RoleEntity;
-import com.wipify.test.model.User;
+import com.wipify.test.model.UserEntity;
 import com.wipify.test.repository.RoleJpaRepository;
+import com.wipify.test.repository.UserJpaRepository;
 import com.wipify.test.repository.UserLoginRepository;
 import com.wipify.test.tools.UserService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -21,17 +29,19 @@ import java.util.Map;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
+
 
     private static final String USER_NOT_FOUND_MESSAGE = "User with username %s not found";
 
     private final UserLoginRepository userLoginRepository;
     private final RoleJpaRepository roleJpaRepository;
+    private final UserJpaRepository userJpaRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
-    public User save(User user){
+    public UserEntity save(UserEntity user){
         log.info("Saving user {} to the database", user.getPseudo());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userLoginRepository.save(user);
@@ -39,26 +49,44 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User addRoleToUser(String username, String roleName){
+    public UserEntity addRoleToUser(String username, String roleName){
         log.info("Adding role {} to user {},", roleName, username);
-        User user = userLoginRepository.findByUsername(username);
+        UserEntity user = userLoginRepository.findByPseudo(username);
         RoleEntity roleEntity = roleJpaRepository.findByName(roleName);
-        user.getRoles().add(roleEntity);
+        user.getRole().add(roleEntity);
         return user;
     }
 
     @Override
-    public User findByUsername(String username) {
+    public UserEntity findByUsername(String username) {
         return null;
     }
 
     @Override
-    public List<User> findAll() {
+    public List<UserEntity> findAll() {
         return null;
     }
 
     @Override
     public Map<String, String> refreshToken(String authorizationHeader, String issuer) throws BadJOSEException, ParseException, JOSEException {
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = userJpaRepository.findByPseudo(username);
+        if(user == null) {
+            String message = String.format(USER_NOT_FOUND_MESSAGE, username);
+            log.error(message);
+            throw new UsernameNotFoundException(message);
+        } else {
+            log.debug("User found in the database: {}", username);
+            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            user.getRole().forEach(role -> {
+                authorities.add(new SimpleGrantedAuthority(role.getName()));
+            });
+            return new User(user.getPseudo(), user.getPassword(), authorities);
+        }
     }
 }
