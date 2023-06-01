@@ -25,6 +25,9 @@ public class UserEntity implements Serializable {
     private String email;
     private String password;
     private String telephone;
+    private Boolean isVerified;
+
+    private String confimartionLink;
     @ManyToMany(fetch = EAGER)
     private Collection<RoleEntity> role = new ArrayList<>();
 
@@ -45,6 +48,22 @@ public class UserEntity implements Serializable {
     public UserEntity(String pseudo, String password, Collection<SimpleGrantedAuthority> authorities) {
         this.pseudo = pseudo;
         this.password = password;
+    }
+
+    public String getConfimartionLink() {
+        return confimartionLink;
+    }
+
+    public void setConfimartionLink(String confimartionLink) {
+        this.confimartionLink = confimartionLink;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 
     public int getId() {
