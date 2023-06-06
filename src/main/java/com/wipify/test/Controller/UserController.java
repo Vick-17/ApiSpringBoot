@@ -8,7 +8,9 @@ import com.wipify.test.repository.UserRepository;
 import com.wipify.test.repository.UserRoleRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,10 @@ public class UserController {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
+    @Value("${serveur.url}")
+    private String url;
+
+
     /**
      * Crée un nouvel utilisateur.
      *
@@ -45,7 +51,8 @@ public class UserController {
         String passwordEncode = bCryptPasswordEncoder.encode(userEntity.getPassword());
         userEntity.setPassword(passwordEncode);
         UserEntity savedUser = userRepository.save(userEntity);
-
+        String token = generateConfirmationToken();
+        String confirmationLink = generateConfirmationLink(savedUser.getId(), token);
         RoleEntity userRole = roleRepository.findByName("ROLE_USER");
         if (userRole == null) {
             throw new RuntimeException("Le rôle 'ROLE_USER' n'a pas été trouvé.");
@@ -56,8 +63,8 @@ public class UserController {
         userRoleEntity.setRole(userRole);
         userRoleRepository.save(userRoleEntity);
 
-        String confirmationLink = generateConfirmationLink(savedUser.getId());
-
+        userEntity.setConfirmationToken(token);
+        userRepository.save(userEntity);
 
         return confirmationLink;
     }
@@ -70,27 +77,30 @@ public class UserController {
      * @return Une chaîne indiquant le statut de la confirmation.
      */
     @GetMapping("/confirmation")
-    public String confirmAccount(@RequestParam("userId") int userId, @RequestParam("token") String token) {
+    public ResponseEntity<String> confirmAccount(@RequestParam("userId") int userId, @RequestParam("token") String token) {
         Optional<UserEntity> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             UserEntity user = optionalUser.get();
-            if (user != null && token.equals(user.getConfimartionLink())) {
+            if (token.equals(user.getConfirmationToken())) {
                 // Mettre à jour le champ is_verified à true
                 user.setVerified(true);
                 userRepository.save(user);
-                return "account_confirmed"; // Afficher une page de confirmation réussie
+                return ResponseEntity.ok("Verification réussie");
             } else {
-                return "invalid_token"; // Afficher une page d'erreur de token invalide
+                return ResponseEntity.badRequest().body("Token invalide");
             }
         } else {
-            return "Utilisateur introuvable";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Utilisateur introuvable");
         }
     }
 
-    private String generateConfirmationLink(int userId) {
-        String token = UUID.randomUUID().toString();
-        String confirmationLink = "http://wipify/confirmation?userId=" + userId + "&token=" + token;
-        return confirmationLink;
+
+    private String generateConfirmationToken() {
+        return UUID.randomUUID().toString();
+    }
+
+    private String generateConfirmationLink(int userId, String token) {
+        return url + "/confirmation?userId=" + userId + "&token=" + token;
     }
 
     /*@PostMapping(value = "/login", consumes = "application/json")

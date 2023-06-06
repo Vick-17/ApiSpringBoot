@@ -1,8 +1,8 @@
 package com.wipify.test.repository;
 
-import com.wipify.test.model.VideoGame;
+import com.wipify.test.model.Article;
 import org.springframework.data.repository.CrudRepository;
 
-public interface VideoGameRepository extends CrudRepository<VideoGame, Integer> {
+public interface VideoGameRepository extends CrudRepository<Article, Integer> {
 
 }

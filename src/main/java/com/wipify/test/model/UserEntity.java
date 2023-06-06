@@ -25,9 +25,12 @@ public class UserEntity implements Serializable {
     private String email;
     private String password;
     private String telephone;
+
+    @Column(name = "is_verified")
     private Boolean isVerified;
 
-    private String confimartionLink;
+    @Column(name = "confirmation_token")
+    private String confirmationToken;
     @ManyToMany(fetch = EAGER)
     private Collection<RoleEntity> role = new ArrayList<>();
 
@@ -50,12 +53,12 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    public String getConfimartionLink() {
-        return confimartionLink;
+    public String getConfirmationToken() {
+        return confirmationToken;
     }
 
-    public void setConfimartionLink(String confimartionLink) {
-        this.confimartionLink = confimartionLink;
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
     }
 
     public Boolean getVerified() {
