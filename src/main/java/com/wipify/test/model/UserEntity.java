@@ -25,6 +25,8 @@ public class UserEntity implements Serializable {
     private String email;
     private String password;
     private String telephone;
+    @Column(name = "photo_path")
+    private String photoPath;
 
     @Column(name = "is_verified")
     private Boolean isVerified;
@@ -133,4 +135,11 @@ public class UserEntity implements Serializable {
         this.role = role;
     }
 
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
+    }
 }

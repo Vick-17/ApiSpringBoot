@@ -13,7 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,10 +47,22 @@ public class UserController {
      * @param response   La réponse HTTP.
      * @return L'utilisateur créé.
      */
-    @PostMapping(value = "/user", consumes = "application/json")
+    @PostMapping(value = "/user", consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
-    public String createUser(@RequestBody UserEntity userEntity, HttpServletResponse response) {
+    public String createUser(@RequestPart("photo") MultipartFile photo, @RequestPart("userEntity") UserEntity userEntity, HttpServletResponse response)
+    {
+        String photoFilename = photo.getOriginalFilename();
+        String photoFilePath = "/resources/img/" + photoFilename;
+
+        try {
+            Files.write(Paths.get(photoFilePath), photo.getBytes());
+            // Ajoutez ici la logique pour enregistrer le chemin du fichier photo dans l'objet UserEntity
+            userEntity.setPhotoPath(photoFilePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Erreur lors de l'enregistrement de la photo : " + e.getMessage());
+        }
+
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         String passwordEncode = bCryptPasswordEncoder.encode(userEntity.getPassword());
         userEntity.setPassword(passwordEncode);
