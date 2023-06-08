@@ -1,7 +1,9 @@
 package com.wipify.test.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,8 +28,11 @@ public class UserEntity implements Serializable {
     private String password;
     private String telephone;
     @Column(name = "photo_path")
-    private String photoPath;
+    private String imageName;
 
+    @JsonIgnore
+    @Transient
+    private MultipartFile imageFile;
     @Column(name = "is_verified")
     private Boolean isVerified;
 
@@ -135,11 +140,19 @@ public class UserEntity implements Serializable {
         this.role = role;
     }
 
-    public String getPhotoPath() {
-        return photoPath;
+    public MultipartFile getImageFile() {
+        return imageFile;
     }
 
-    public void setPhotoPath(String photoPath) {
-        this.photoPath = photoPath;
+    public void setImageFile(MultipartFile imageFile) {
+        this.imageFile = imageFile;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }

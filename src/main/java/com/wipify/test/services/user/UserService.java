@@ -1,4 +1,4 @@
-package com.wipify.test.Controller;
+package com.wipify.test.services.user;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
@@ -7,7 +7,6 @@ import com.wipify.test.model.UserEntity;
 import com.wipify.test.repository.RoleJpaRepository;
 import com.wipify.test.repository.UserJpaRepository;
 import com.wipify.test.repository.UserLoginRepository;
-import com.wipify.test.tools.UserService;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,7 @@ import java.util.Map;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserService implements com.wipify.test.tools.UserService, UserDetailsService {
 
 
     private static final String USER_NOT_FOUND_MESSAGE = "User with username %s not found";

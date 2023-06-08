@@ -1,7 +1,7 @@
-package com.wipify.test.model;
+package com.wipify.test.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wipify.test.tools.JwtUtils;
+import com.wipify.test.security.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

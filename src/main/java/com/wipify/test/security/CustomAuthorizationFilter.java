@@ -1,9 +1,9 @@
-package com.wipify.test.model;
+package com.wipify.test.security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.wipify.test.tools.JwtUtils;
+import com.wipify.test.security.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
