@@ -18,7 +18,7 @@ public class ArticleController {
     @GetMapping(value = "/articles")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public Iterable<Article> getVideoGames(){
+    public Iterable<Article> getVideoGames() {
         return videoGameRepository.findAll();
     }
 
@@ -48,11 +48,11 @@ public class ArticleController {
     @PutMapping(value = "/article/{id}", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
-    public ResponseEntity<Article> updateArticle(@PathVariable int id, @RequestBody Article updatedArticle){
+    public ResponseEntity<Article> updateArticle(@PathVariable int id, @RequestBody Article updatedArticle) {
 
         // Recherche de l'article existant avec l'ID spécifié dans le chemin de la requête
         Optional<Article> optionalArticle = videoGameRepository.findById(id);
-        if(optionalArticle.isPresent()){
+        if (optionalArticle.isPresent()) {
 
             // Si l'article existe, on le récupère de l'Optional
             Article article = optionalArticle.get();
@@ -65,7 +65,7 @@ public class ArticleController {
             Article savedArticle = videoGameRepository.save(article);
             // Retourne une réponse avec le statut 200 OK et l'article mis à jour
             return ResponseEntity.ok(savedArticle);
-        }else {
+        } else {
             // Si l'article avec l'ID spécifié n'est pas trouvé, retourne une réponse 404 Not Found
             return ResponseEntity.notFound().build();
         }
@@ -87,8 +87,4 @@ public class ArticleController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
-
 }
