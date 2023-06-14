@@ -1,11 +1,12 @@
 package com.wipify.test.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="youtube_video")
 public class YoutubeVideo {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
 private int id;
 private String url;
 
