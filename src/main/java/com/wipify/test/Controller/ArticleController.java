@@ -23,7 +23,7 @@ public class ArticleController {
     }
 
 
-    @PostMapping(value = "/article", consumes = "application/json")
+    @PostMapping(value = "/articles", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
     public Article createVideoGame(@RequestBody Article article) {
@@ -32,7 +32,7 @@ public class ArticleController {
     }
 
 
-    @GetMapping("/article/{id}")
+    @GetMapping("/articles/{id}")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
     public ResponseEntity<Article> getVideoGameById(@PathVariable int id) {
@@ -45,7 +45,7 @@ public class ArticleController {
         }
     }
 
-    @PutMapping(value = "/article/{id}", consumes = "application/json")
+    @PutMapping(value = "/articles/{id}", consumes = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin
     public ResponseEntity<Article> updateArticle(@PathVariable int id, @RequestBody Article updatedArticle) {
@@ -71,7 +71,7 @@ public class ArticleController {
         }
     }
 
-    @DeleteMapping("/article/{id}")
+    @DeleteMapping("/articles/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin
     public ResponseEntity<Void> deleteVideoGame(@PathVariable int id) {
