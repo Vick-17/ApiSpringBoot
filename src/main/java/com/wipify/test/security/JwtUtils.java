@@ -103,41 +103,4 @@ public abstract class JwtUtils {
                 .collect(Collectors.toList());
         return new UsernamePasswordAuthenticationToken(username, null, authorities);
     }
-
-    @Configuration
-    @RequiredArgsConstructor
-    public static class SecurityConfig {
-        @Bean
-        public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-            return authConfig.getAuthenticationManager();
-        }
-
-
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
-            http
-                    .cors().and()
-                    .csrf().disable()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                    .authorizeHttpRequests((authz) -> authz
-                            .requestMatchers(HttpMethod.POST, "/login/**").permitAll()
-                            .requestMatchers(HttpMethod.GET,"/articles/**").permitAll()
-                            .requestMatchers(HttpMethod.GET,"/article/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/user/**").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/confirmation/**").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/youtubeVideo/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/youtubevideo/**").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "/article/**").hasAuthority("ROLE_ADMIN")
-                            .requestMatchers(HttpMethod.DELETE, "/article/**").hasAuthority("ROLE_ADMIN")
-                            .requestMatchers(HttpMethod.POST, "/article/**").hasAuthority("ROLE_ADMIN")
-                            .anyRequest().authenticated()
-                    )
-                    .addFilter(new CustomAuthenticationFilter(authenticationManager))
-                    .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-                    .headers().cacheControl();
-            return http.build();
-        }
-    }
 }
