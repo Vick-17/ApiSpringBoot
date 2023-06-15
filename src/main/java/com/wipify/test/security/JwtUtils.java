@@ -128,7 +128,7 @@ public abstract class JwtUtils {
                             .requestMatchers(HttpMethod.GET, "/user/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/confirmation/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/youtubeVideo/**").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/youtubeVideo/**").hasAuthority("ROLE_ADMIN")
+                            .requestMatchers(HttpMethod.POST, "/youtubevideo/**").hasAuthority("ROLE_ADMIN")
                             .requestMatchers(HttpMethod.PUT, "/article/**").hasAuthority("ROLE_ADMIN")
                             .requestMatchers(HttpMethod.DELETE, "/article/**").hasAuthority("ROLE_ADMIN")
                             .requestMatchers(HttpMethod.POST, "/article/**").hasAuthority("ROLE_ADMIN")
