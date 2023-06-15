@@ -10,7 +10,7 @@ public class YoutubeVideoController {
     @Autowired
     private YoutubeVideoRepository youtubeVideoRepository;
 
-    @PostMapping(value = "/youtubeVideo", consumes = "application/json")
+    @PostMapping(value = "/youtubevideo", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
     public YoutubeVideo addYoutubeVideo(@RequestBody YoutubeVideo youtubeVideo) {
